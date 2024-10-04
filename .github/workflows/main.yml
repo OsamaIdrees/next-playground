@@ -18,7 +18,7 @@ jobs:
             ssh-private-key: ${{ secrets.BASTION_KEY_EDU }}
         - name: Add Target Host to Known Hosts
           run: |
-              ssh-keyscan -H ${{ vars.BASTION_KEY_EDU }} >> ~/.ssh/known_hosts
+              ssh-keyscan -H ${{ vars.BASTION_EDU_HOST }} >> ~/.ssh/known_hosts
         - name: Verify Connection to Bastion and Check CWD
           run: |
             ssh -o StrictHostKeyChecking=no ${{ vars.BASTION_EDU_USER }}@${{ vars.BASTION_EDU_HOST }} '
