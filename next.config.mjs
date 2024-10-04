@@ -2,7 +2,7 @@
 const nextConfig = {
     output: "export",
     trailingSlash: true,
-    // basePath:"/next"
+    basePath:"/next"
 
 };
 
