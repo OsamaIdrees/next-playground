@@ -1,0 +1,34 @@
+
+name: Deploy to Staging via Bastion
+
+on:
+  push:
+    
+
+jobs:
+ main-branch-job:
+        runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/main'
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - name: Add Commercial SSH key 
+          uses: webfactory/ssh-agent@v0.5.3
+          with:
+            ssh-private-key: ${{ secrets.BASTION_KEY_EDU }}
+        - name: Add Target Host to Known Hosts
+          run: |
+              ssh-keyscan -H ${{ vars.BASTION_KEY_EDU }} >> ~/.ssh/known_hosts
+        - name: Verify Connection to Bastion and Check CWD
+          run: |
+            ssh -o StrictHostKeyChecking=no ${{ vars.BASTION_EDU_USER }}@${{ vars.BASTION_EDU_HOST }} '
+               echo "Connected to Bastion";
+              chmod 600 ${{ vars.EC2_STG_KEY }};  # Ensure correct permissions for the EC2 pem file
+              ssh -i ${{ vars.EC2_STG_KEY }} ${{ vars.EC2_STG_USER }}@${{ vars.EC2_STG_HOST }}  "echo Connected to EC2;
+                   sudo bash /var/www/next-playground/deploy.sh;
+                ";
+            '
+
+                
+
+              
